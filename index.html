@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="校园足球场半场预约与封场管理演示系统" />
+    <meta name="theme-color" content="#173f2a" />
+    <title>校园球场 · 场地预约</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <a class="brand" href="#" aria-label="返回预约首页">
+        <span class="brand-mark" aria-hidden="true">⚽</span>
+        <span><strong>校园球场</strong><small>FOOTBALL BOOKING</small></span>
+      </a>
+      <nav class="nav-tabs" aria-label="主要功能">
+        <button class="nav-tab active" data-view="booking">预约看板</button>
+        <button class="nav-tab" data-view="mine">我的预约</button>
+        <button class="nav-tab" data-view="admin">管理中心</button>
+      </nav>
+      <div class="demo-user"><span class="user-dot"></span>演示用户</div>
+    </header>
+
+    <main>
+      <section class="view active" id="booking-view">
+        <div class="hero-shell">
+          <div class="hero-copy">
+            <p class="eyebrow">CAMPUS SPORTS · 校园体育</p>
+            <h1>把时间留给踢球，<br /><span>而不是群里接龙。</span></h1>
+            <p class="hero-description">多块球场、左右半场独立预约，学校活动提前公示。所有人看到同一份场地安排。</p>
+            <div class="hero-actions">
+              <button class="primary-button" id="jump-to-board">立即预约 <span>→</span></button>
+              <span class="live-status"><i></i> 场地状态实时更新</span>
+            </div>
+          </div>
+          <div class="pitch-visual" aria-label="足球场分为左半场和右半场的示意图">
+            <div class="pitch-label left-label">A · 左半场</div>
+            <div class="pitch-label right-label">B · 右半场</div>
+            <div class="pitch-line halfway"></div>
+            <div class="center-circle"></div>
+            <div class="penalty-box left-box"></div>
+            <div class="penalty-box right-box"></div>
+            <div class="pitch-corner corner-one"></div>
+            <div class="pitch-corner corner-two"></div>
+            <div class="pitch-corner corner-three"></div>
+            <div class="pitch-corner corner-four"></div>
+          </div>
+        </div>
+
+        <section class="content-shell booking-board" id="booking-board">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow dark">BOOK A FIELD</p>
+              <h2>选择日期、球场与半场</h2>
+            </div>
+            <div class="legend" aria-label="场地状态图例">
+              <span><i class="legend-dot available"></i>可预约</span>
+              <span><i class="legend-dot booked"></i>已预约</span>
+              <span><i class="legend-dot closed"></i>学校占用</span>
+            </div>
+          </div>
+
+          <div class="date-strip" id="date-strip" aria-label="选择预约日期"></div>
+
+          <div class="venue-section">
+            <div class="venue-section-label">
+              <span>选择足球场</span>
+              <small>每块球场均可预约左右半场</small>
+            </div>
+            <div class="venue-selector" id="venue-selector" aria-label="选择足球场"></div>
+          </div>
+
+          <div class="notice-bar" id="day-notice">
+            <span class="notice-icon">i</span>
+            <p><strong>预约提示</strong><span>每次预约 1 小时；绿色时段可以直接选择。</span></p>
+          </div>
+
+          <div class="field-grid" id="field-grid"></div>
+        </section>
+      </section>
+
+      <section class="view content-shell standalone-view" id="mine-view">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow dark">MY BOOKINGS</p>
+            <h2>我的预约</h2>
+            <p class="section-subtitle">本演示版会显示当前浏览器创建的预约。</p>
+          </div>
+          <button class="secondary-button" data-go-booking>＋ 新建预约</button>
+        </div>
+        <div class="booking-list" id="my-bookings"></div>
+      </section>
+
+      <section class="view content-shell standalone-view" id="admin-view">
+        <div class="admin-banner">
+          <div>
+            <span class="admin-badge">管理员演示模式</span>
+            <h2>场地封闭与活动安排</h2>
+            <p>学校可提前锁定某块球场、某个半场，或一次封闭全部球场。正式版会添加管理员身份验证和通知功能。</p>
+          </div>
+          <span class="shield" aria-hidden="true">◆</span>
+        </div>
+
+        <div class="admin-layout">
+          <form class="panel admin-form" id="blockout-form">
+            <div class="panel-heading">
+              <span class="step-number">01</span>
+              <div><h3>新增封场安排</h3><p>设置活动、施工或维护时段</p></div>
+            </div>
+            <label>日期<input id="block-date" name="date" type="date" required /></label>
+            <div class="form-row">
+              <label>开始时间<select id="block-start" name="start" required></select></label>
+              <label>结束时间<select id="block-end" name="end" required></select></label>
+            </div>
+            <div class="form-row">
+              <label>选择球场
+                <select id="block-venue" name="venue" required>
+                  <option value="all">全部足球场</option>
+                  <option value="field1">一号足球场</option>
+                  <option value="field2">二号足球场</option>
+                  <option value="field3">三号足球场</option>
+                </select>
+              </label>
+              <label>占用范围
+                <select id="block-half" name="half" required>
+                  <option value="all">整场</option>
+                  <option value="A">A · 左半场</option>
+                  <option value="B">B · 右半场</option>
+                </select>
+              </label>
+            </div>
+            <label>封场原因<input id="block-reason" name="reason" placeholder="例如：校园运动会 / 草坪维护" maxlength="40" required /></label>
+            <button class="danger-button" type="submit">确认封闭场地</button>
+            <p class="form-note">若该时段已有预约，演示版会自动将其标记为“因封场取消”。</p>
+          </form>
+
+          <section class="panel schedule-panel">
+            <div class="panel-heading">
+              <span class="step-number">02</span>
+              <div><h3>已发布安排</h3><p>学生将在预约看板看到这些信息</p></div>
+            </div>
+            <div id="blockout-list" class="blockout-list"></div>
+          </section>
+        </div>
+
+        <div class="prototype-note">
+          <strong>目前是本地原型</strong>
+          <span>数据只保存在这台电脑的当前浏览器中。下一阶段接入在线数据库后，才能实现全校用户实时同步和真正的并发锁定。</span>
+        </div>
+      </section>
+    </main>
+
+    <dialog class="modal" id="booking-modal">
+      <form method="dialog" id="booking-form">
+        <div class="modal-header">
+          <div><p class="eyebrow dark">CONFIRM BOOKING</p><h2>确认预约</h2></div>
+          <button class="icon-button" type="button" data-close-modal aria-label="关闭">×</button>
+        </div>
+        <div class="selected-slot" id="selected-slot"></div>
+        <input id="booking-date" name="date" type="hidden" />
+        <input id="booking-venue" name="venue" type="hidden" />
+        <input id="booking-half" name="half" type="hidden" />
+        <input id="booking-start" name="start" type="hidden" />
+        <label>球队或活动名称<input id="booking-team" name="team" placeholder="例如：计算机学院足球队" maxlength="30" required /></label>
+        <label>预约人姓名<input id="booking-captain" name="captain" placeholder="请输入姓名" maxlength="20" required /></label>
+        <label>联系方式<input id="booking-contact" name="contact" placeholder="手机号或微信号" maxlength="30" required /></label>
+        <div class="modal-actions">
+          <button class="secondary-button" type="button" data-close-modal>暂不预约</button>
+          <button class="primary-button" type="submit" value="default">提交预约</button>
+        </div>
+      </form>
+    </dialog>
+
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+    <footer>
+      <span>校园球场预约系统 · 原型版</span>
+      <span>让每一块场地都有清晰安排</span>
+    </footer>
+    <script src="app.js"></script>
+  </body>
+</html>
